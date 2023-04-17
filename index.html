@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Title</title>
+</head>
+
+<div>
+  <div>
+    Task Status: <span id="taskStatus"></span>
+    <br>
+    Review Status: <span id="reviewStatus"></span>
+  </div>
+  <div id="taskState">
+
+  </div>
+
+  <button id="inProgress">Change status to "InProgress"</button>
+  <br>
+  <button id="finish">Change status to "Finish"</button>
+  <br>
+  <button id="toReview">Change status to "Review"</button>
+  <br>
+  <button id="accept">Change status to "Accept"</button>
+  <br>
+  <button id="reject">Change status to "Reject"</button>
+
+  <br>
+  <br>
+  <br>
+  <button id="next">Next status</button>
+</div>
+
+<body>
+  <script type="module">
+    import DefaultState from "./state/task-state/default.state.js";
+
+    const taskState = {
+      finished: false,
+      inProgress: false,
+      reviewStatus: 'not-assigned'
+    };
+    let state = new DefaultState();
+
+    const taskStateElement = document.querySelector('#taskState');
+    const taskStatusElement = document.querySelector('#taskStatus');
+    const reviewStatusElement = document.querySelector('#reviewStatus');
+
+    const updateTaskState = () => {
+      taskStateElement.innerText = JSON.stringify(taskState, null, "\n");
+    };
+
+    updateTaskState();
+
+    inProgress.addEventListener('click', () => {
+      taskState.inProgress = true;
+      taskState.finished = false;
+
+      updateTaskState();
+    });
+
+    finish.addEventListener('click', () => {
+      taskState.finished = true;
+      taskState.inProgress = false;
+
+      updateTaskState();
+    });
+
+    toReview.addEventListener('click', () => {
+      taskState.reviewStatus = 'inReview';
+
+      updateTaskState();
+    });
+
+    accept.addEventListener('click', () => {
+      taskState.reviewStatus = 'accept';
+
+      updateTaskState();
+    });
+
+    reject.addEventListener('click', () => {
+      taskState.reviewStatus = 'reject';
+
+      updateTaskState();
+    });
+
+    next.addEventListener('click', () => {
+      state = state.next(taskState);
+      taskStatusElement.innerHTML = state.taskStatus;
+      reviewStatusElement.innerHTML = state.reviewStatus;
+
+      console.error(state);
+    });
+
+    taskStatusElement.innerHTML = state.taskStatus;
+    reviewStatusElement.innerHTML = state.reviewStatus;;
+  </script>
+</body>
+</html>
